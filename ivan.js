@@ -14,6 +14,7 @@ function calculate(items, maxBoxWeight) {
           boxes1.forEach((box2, index2) => {
             box2.items.sort((a, b) => a.weight - b.weight);
             let item2 = box2.items.find(item => item.weight < spaceLeft);
+            console.log("1111");
             if (item2 && (!item || item2.weight > item.weight)) {
               box = box2;
               item = item2;
@@ -33,7 +34,7 @@ function calculate(items, maxBoxWeight) {
     return totalActions;
   }
 
-  function calc() {
+  function calc1() {
     // console.clear();
     // reset the boxes
     boxes = [];
@@ -97,6 +98,71 @@ function calculate(items, maxBoxWeight) {
     // console.log("min boxes2:", minBoxesCount);
     // console.log("extra boxes2:", boxes.length - minBoxesCount);
     // console.log(boxes.map(({ weight }) => weight));
+    return boxes;
+  }
+
+  function calc() {
+    // console.clear();
+    // reset the boxes
+    boxes = [];
+    // create items
+    let box;
+    // ,
+    //   items = new Array(
+    //     Math.round(Math.random() * (maxItems - minItems) + minItems)
+    //   )
+    //     .fill(0)
+    //     .map((n, index) => ({
+    //       id: index,
+    //       weight: +(
+    //         Math.random() * (maxItemSize - minItemSize) +
+    //         minItemSize
+    //       ).toFixed(3)
+    //     })),
+    //   itemsWeight = +items
+    //     .reduce((acc, item) => acc + item.weight, 0)
+    //     .toFixed(3),
+    //   minBoxesCount = Math.ceil(itemsWeight / maxBoxWeight);
+
+    // version 1
+    // items.forEach(item => {
+    //   if (!box || box.weight + item.weight > maxBoxWeight) {
+    //     boxes.push((box = { weight: 0, items: [] }));
+    //   }
+    //   box.weight = +(box.weight + item.weight).toFixed(3);
+    //   box.items.push(item);
+    // });
+    // console.log('total weight:', itemsWeight);
+    //console.log('items:', items);
+    //console.log('boxes:', boxes);
+    // console.log('min boxes based on total weight:', minBoxesCount);
+    // console.log('total boxes:', boxes.length);
+
+    // version 2
+    // sort the items descending
+    items.sort((a, b) => b.weight - a.weight);
+    // reset the boxes
+    boxes = [];
+    // add items to boxes
+    items.forEach(item => {
+      /* this does nothing :)
+      let box;
+      do {
+        box = boxes.find(box => box.weight + item.weight <= maxBoxWeight);
+      } while (boxes.length && (!box && compactBoxes()))*/
+      let box = boxes.find(box => box.weight + item.weight <= maxBoxWeight);
+      if (box) {
+        box.items.push(item);
+        box.weight += item.weight;
+      } else {
+        boxes.push({ weight: item.weight, items: [item] });
+      }
+    });
+
+    // console.log('items:', items.map(item => item.weight));
+    // console.log('boxes:', boxes);
+    // console.log('min boxes based on total weight:', minBoxesCount);
+    // console.log('total boxes:', boxes.length);
     return boxes;
   }
 
